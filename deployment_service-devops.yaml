@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blogapp-devops
+  namespace: v2
+spec:
+  selector:
+    matchLabels:
+      app: blogapp-devops
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: blogapp-devops  
+    spec:
+      containers:
+        - name: blogapp-devops
+          image: localhost:5000/blogapp-devops:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8282
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blogapp-devops
+  namespace: v2
+spec:
+  selector:
+    app: blogapp-devops
+  ports:
+    - protocol: TCP
+      port: 8282
+      targetPort: 8282
+  type: LoadBalancer
+
